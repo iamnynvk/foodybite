@@ -160,6 +160,7 @@ const LoginScreen = ({navigation}) => {
             onBlur={passwordValidation}
             placeholderText="Password"
             iconType={password}
+            iconStyle={{height: SIZES.width * 0.065}}
             keyboardType="default"
             autoCapitalize="none"
             secureTextEntry={true}
@@ -292,7 +293,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontFamily: 'JosefinSans-Regular',
-    textDecorationLine: 'underline',
   },
 });
 export default LoginScreen;

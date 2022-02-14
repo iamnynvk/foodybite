@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginStart: SIZES.width * 0.1,
     marginEnd: SIZES.width * 0.1,
-    fontFamily: 'JosefinSans-Thin',
+    fontFamily: 'JosefinSans-Regular',
     fontSize: 22,
   },
 });

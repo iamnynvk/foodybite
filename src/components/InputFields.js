@@ -9,12 +9,13 @@ const InputFields = ({
   placeholderText,
   iconType,
   style,
+  iconStyle,
   ...rest
 }) => {
   return (
     <View style={[styles.inputContainer, style]}>
       <View style={styles.imageView}>
-        <Image source={iconType} style={styles.inputImage} />
+        <Image source={iconType} style={[styles.inputImage, iconStyle]} />
       </View>
       <TextInput
         value={labelValue}

@@ -22,7 +22,7 @@ const Header = ({title, iconType, back}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
+    height: 60,
     justifyContent: 'center',
   },
   imageView: {
