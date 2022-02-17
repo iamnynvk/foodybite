@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   inputImage: {
     height: 20,
-    width: 25,
+    width: 23.7,
   },
   inputTextField: {
     width: '86%',

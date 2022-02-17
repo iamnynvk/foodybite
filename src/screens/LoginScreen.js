@@ -23,7 +23,9 @@ const LoginScreen = ({navigation}) => {
     password: {value: '', error: '', isValid: false},
   });
 
+  // Button State
   const [isDisabled, setIsDisabled] = useState(true);
+  // Loading State
   const [visible, setVisible] = useState(false);
 
   // Set Login Button Visible or not
@@ -100,8 +102,6 @@ const LoginScreen = ({navigation}) => {
     const emailValue = data.email.value;
     const passwordValue = data.password.value;
 
-    console.log('Email: ' + emailValue + ' Password: ' + passwordValue);
-
     setVisible(true);
     setTimeout(() => {
       setVisible(false);
@@ -160,7 +160,7 @@ const LoginScreen = ({navigation}) => {
             onBlur={passwordValidation}
             placeholderText="Password"
             iconType={password}
-            iconStyle={{height: SIZES.width * 0.065}}
+            iconStyle={{height: SIZES.width * 0.075}}
             keyboardType="default"
             autoCapitalize="none"
             secureTextEntry={true}

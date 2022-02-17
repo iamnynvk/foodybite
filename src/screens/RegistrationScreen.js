@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,14 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {BlurView} from '@react-native-community/blur';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
+import ProgressDialog from 'react-native-progress-dialog';
+import ImagePicker from 'react-native-image-crop-picker';
+
+// Context Provider
+import {AuthContext} from '../navigation/AuthProvider';
 
 // components
 import Header from '../components/Header';
@@ -21,71 +25,231 @@ import Error from '../components/Error';
 
 // constants
 import {backgroundTwo} from '../constants/images';
-import {upload, profile} from '../constants/icons';
+import {profile} from '../constants/icons';
 import {SIZES} from '../constants/theme';
 import {back, mail, password} from '../constants/icons';
 
 const RegistrationScreen = ({navigation}) => {
-  const bottomSheetRef = React.useRef();
-  const fall = new Animated.Value(1);
+  // AuthContext Provide
+  const {authRegisterUser, registrationUser} = useContext(AuthContext);
+
+  const defaultImage =
+    'https://static.vecteezy.com/system/resources/previews/004/607/806/non_2x/man-face-emotive-icon-smiling-bearded-male-character-in-yellow-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg';
 
   const [data, setData] = useState({
-    imageUrl: {value: '', error: '', isValid: false},
+    imageUrl: {value: defaultImage, error: '', isValid: false},
     name: {value: '', error: '', isValid: false},
     email: {value: '', error: '', isValid: false},
     password: {value: '', error: '', isValid: false},
     repassword: {value: '', error: '', isValid: false},
   });
 
+  // Button State
   const [isDisabled, setIsDisabled] = useState(true);
+  // Loading State
+  const [visible, setVisible] = useState(false);
 
+  // Set Login Button Visible or not
+  useEffect(() => {
+    VisibleButton();
+    console.log('Image Url', data.imageUrl.value);
+  }, [{...data}]);
+
+  // Image Picker - Open Gallery
+  const galaryOpenAction = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setData({
+        ...data,
+        imageUrl: {
+          ...data.imageUrl,
+          value: imageUri,
+          isValid: true,
+        },
+      });
+    });
+  };
+
+  // Name Validations
   const nameValidation = () => {
     const {value} = data.name;
 
-    if (value == null) {
+    if (value == '') {
       setData({
         ...data,
         name: {
+          value: value,
           error: '* Please! Enter Your Name',
           isValid: false,
         },
       });
+    } else if (value.length <= 5) {
+      setData({
+        ...data,
+        name: {
+          value: value,
+          error: '* Please! Enter Full Name',
+          isValid: false,
+        },
+      });
     } else {
-      setData({...data, name: {value: value, isValid: true}});
+      setData({...data, name: {...data.name, isValid: true}});
     }
   };
 
-  const emailValidation = () => {};
+  // Email Validations
+  const emailValidation = () => {
+    const {value} = data.email;
 
-  const passwordValidation = () => {};
-
-  const rePasswordValidation = () => {};
-
-  const registrationHandler = () => {};
-
-  // Bottom Sheet Header
-  const renderHeader = () => {
-    <View style={styles.headerOpen}>
-      <View style={styles.pannelHeader}>
-        <View style={styles.pannelHandle}></View>
-      </View>
-    </View>;
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(value) == false) {
+      setData({
+        ...data,
+        email: {
+          value: value,
+          error: '* Please Enter Valid Email',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        email: {
+          ...data.email,
+          isValid: true,
+        },
+      });
+    }
   };
 
-  // Bottom Sheet Content
-  const renderContent = () => {
-    <View style={styles.buttomSheetView}>
-      <View style={styles.bottomSheetInnerView}>
-        <Text style={[styles.headerTitle, {marginStart: 10}]}>Choose Gain</Text>
-        <TouchableOpacity onPress={() => bottomSheetRef.current.snapTo(1)}>
-          <Text style={[styles.headerTitle, {marginEnd: 10}]}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    </View>;
+  // Password Validation
+  const passwordValidation = () => {
+    const {value} = data.password;
+    let passwordSize = value.length;
+
+    if (passwordSize == 0) {
+      setData({
+        ...data,
+        password: {
+          value: value,
+          error: '* Please Enter Password',
+          isValid: false,
+        },
+      });
+    } else if (passwordSize < 8 || passwordSize > 20) {
+      setData({
+        ...data,
+        password: {
+          value: value,
+          error: '* Password should be min 8 char and max 20 char',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        password: {
+          ...data.password,
+          isValid: true,
+        },
+      });
+    }
+  };
+
+  // Repassword Validation
+  const rePasswordValidation = () => {
+    const {value} = data.repassword;
+    let repasswordSize = value.length;
+
+    const password = data.password.value;
+
+    if (repasswordSize == 0) {
+      setData({
+        ...data,
+        repassword: {
+          value: value,
+          error: '* Please Enter Password',
+          isValid: false,
+        },
+      });
+    } else if (repasswordSize < 8 || repasswordSize > 20) {
+      setData({
+        ...data,
+        repassword: {
+          value: value,
+          error: '* Password should be min 8 char and max 20 char',
+          isValid: false,
+        },
+      });
+    } else if (value != password) {
+      setData({
+        ...data,
+        repassword: {
+          value: value,
+          error: '* Password not match',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        repassword: {
+          ...data.repassword,
+          isValid: true,
+        },
+      });
+    }
+  };
+
+  // Register Button Visible or not
+  const VisibleButton = () => {
+    const nameErr = data.name.error;
+    const emailErr = data.email.error;
+    const passwordErr = data.password.error;
+    const repasswordErr = data.repassword.error;
+
+    if (
+      nameErr == null &&
+      emailErr == null &&
+      passwordErr == null &&
+      repasswordErr == null
+    ) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
+
+  const registrationHandler = () => {
+    const imageUrl = data.imageUrl.value;
+    const name = data.name.value;
+    const email = data.email.value;
+    const password = data.password.value;
+
+    if (imageUrl && name && email && password) {
+      setVisible(true);
+      authRegisterUser(email, password);
+      registrationUser(imageUrl, name, email);
+      setTimeout(() => {
+        navigation.navigate('LoginScreen');
+        setVisible(false);
+      }, 2000);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <ProgressDialog
+        visible={visible}
+        label="Please Wait..."
+        loaderColor="black"
+      />
       <StatusBar barStyle="light-content" backgroundColor="#1C1A16" />
       <ImageBackground source={backgroundTwo} style={styles.imageStyle}>
         <BlurView
@@ -105,13 +269,16 @@ const RegistrationScreen = ({navigation}) => {
         <ScrollView>
           <View>
             {/* Select Image */}
-            <View onTouchStart={() => bottomSheetRef.current.snapTo(0)}>
+            <View>
               <TouchableOpacity
                 onPress={() => {
-                  bottomSheetRef.current.snapTo(0);
+                  galaryOpenAction();
                 }}>
                 <View style={styles.imageView}>
-                  <Image source={upload} style={styles.upload} />
+                  <Image
+                    source={{uri: data.imageUrl.value}}
+                    style={styles.imageSet}
+                  />
                 </View>
               </TouchableOpacity>
 
@@ -146,7 +313,7 @@ const RegistrationScreen = ({navigation}) => {
                 onChangeText={text => {
                   setData({...data, email: {value: text}});
                 }}
-                style={{marginTop: SIZES.height * 0.03}}
+                style={{marginTop: SIZES.height * 0.05}}
                 onBlur={emailValidation}
                 placeholderText="Email"
                 iconType={mail}
@@ -166,7 +333,7 @@ const RegistrationScreen = ({navigation}) => {
                 onChangeText={text => {
                   setData({...data, password: {value: text}});
                 }}
-                style={{marginTop: SIZES.height * 0.03}}
+                style={{marginTop: SIZES.height * 0.05}}
                 onBlur={passwordValidation}
                 placeholderText="Password"
                 iconType={password}
@@ -188,7 +355,7 @@ const RegistrationScreen = ({navigation}) => {
                 onChangeText={text => {
                   setData({...data, repassword: {value: text}});
                 }}
-                style={{marginTop: SIZES.height * 0.03}}
+                style={{marginTop: SIZES.height * 0.05}}
                 onBlur={rePasswordValidation}
                 placeholderText="Confirm Password"
                 iconType={password}
@@ -222,28 +389,20 @@ const RegistrationScreen = ({navigation}) => {
             <View
               style={{
                 marginTop: SIZES.height * 0.12,
-                marginBottom: SIZES.height * 0.05,
+                marginBottom: SIZES.height * 0.1,
               }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('LoginScreen')}>
-                <View style={styles.alreadyAccountView}>
-                  <Text style={styles.alreadyAccount}>Create New Account</Text>
-                </View>
-              </TouchableOpacity>
+              <View style={styles.alreadyAccountView}>
+                <Text style={styles.alreadyAccount}>
+                  Already have an account?{' '}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('LoginScreen')}>
+                  <Text style={[styles.alreadyAccount, {color: '#5663FF'}]}>
+                    Login
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-
-          <View>
-            <BottomSheet
-              ref={bottomSheetRef}
-              snapPoints={['60%', 0, 0]}
-              borderRadius={10}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              initialSnap={1}
-              callbackNode={fall}
-              enabledGestureInteraction={true}
-            />
           </View>
         </ScrollView>
       </ImageBackground>
@@ -288,9 +447,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'red',
   },
-  upload: {
-    height: SIZES.width * 0.1,
-    width: SIZES.width * 0.1,
+  imageSet: {
+    flex: 1,
+    width: SIZES.width * 0.3,
+    height: SIZES.height * 0.1,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: (SIZES.width * 0.3) / 2,
+    overflow: 'hidden',
   },
   buttonContainer: {
     width: '90%',
@@ -298,7 +462,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginStart: SIZES.width * 0.05,
     marginEnd: SIZES.width * 0.05,
-    marginTop: SIZES.height * 0.05,
+    marginTop: SIZES.height * 0.1,
     backgroundColor: '#5663FF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -311,6 +475,7 @@ const styles = StyleSheet.create({
   alreadyAccountView: {
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   alreadyAccount: {
     color: 'white',
