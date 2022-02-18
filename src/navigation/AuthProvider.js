@@ -3,6 +3,7 @@ import {ToastAndroid} from 'react-native';
 
 // Import Methods from Firebase
 import {
+  getAuthUserId,
   authRegisterHandler,
   registrationHandler,
   loginHandler,
@@ -17,35 +18,34 @@ export const AuthProvider = ({children}) => {
       value={{
         authUser,
         setAuthUser,
-        authRegisterUser: async (email, password) => {
+
+        // User Authentication & Registration both in One Method
+
+        authAndRegisterUser: async (imageUri, names, emails, passwords) => {
           try {
-            const result = authRegisterHandler(email, password);
+            await authRegisterHandler(imageUri, names, emails, passwords);
             ToastAndroid.show(
-              `Verification Email Sent to ${email}`,
+              `Registration Successful, Please Check Your Email To Verify Your Account`,
+              ToastAndroid.SHORT,
+            );
+            ToastAndroid.show(
+              `Verification Email Sent to ${emails}`,
               ToastAndroid.LONG,
             );
-            console.log('Authenticate User : -----> ', result);
           } catch (error) {
             console.log('Authenticate Error from context : ', error);
           }
         },
 
-        registrationUser: async (imageUrl, name, email) => {
-          try {
-            const result = registrationHandler(imageUrl, name, email);
-          } catch (error) {
-            console.log('Registration Error from context : ', error);
-          }
-        },
+        // User Login Method
 
-        loginUser: async (email, password) => {
+        loginUser: async (emails, passwords) => {
           try {
-            const result = loginHandler(email, password);
+            await loginHandler(emails, passwords);
             ToastAndroid.show(
-              `Verification Email Sent to ${email}`,
+              `Verification Email Sent to ${emails}`,
               ToastAndroid.LONG,
             );
-            console.log('Login User : -----> ', result);
           } catch (error) {
             console.log('Login Error from context : ', error);
           }

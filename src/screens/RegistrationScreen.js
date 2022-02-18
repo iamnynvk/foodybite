@@ -31,7 +31,7 @@ import {back, mail, password} from '../constants/icons';
 
 const RegistrationScreen = ({navigation}) => {
   // AuthContext Provide
-  const {authRegisterUser, registrationUser} = useContext(AuthContext);
+  const {authAndRegisterUser} = useContext(AuthContext);
 
   const defaultImage =
     'https://static.vecteezy.com/system/resources/previews/004/607/806/non_2x/man-face-emotive-icon-smiling-bearded-male-character-in-yellow-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg';
@@ -52,7 +52,7 @@ const RegistrationScreen = ({navigation}) => {
   // Set Login Button Visible or not
   useEffect(() => {
     VisibleButton();
-    console.log('Image Url', data.imageUrl.value);
+    // console.log('Image Url :', data.imageUrl.value);
   }, [{...data}]);
 
   // Image Picker - Open Gallery
@@ -62,9 +62,12 @@ const RegistrationScreen = ({navigation}) => {
       height: 400,
       cropping: true,
     }).then(image => {
-      console.log(image);
+      console.log('Image Data Receive :', image);
 
-      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      const imageUri =
+        Platform.OS === 'ios' ? image.replace('file://', '') : image.path;
+
+      console.log('Image URI :', imageUri);
       setData({
         ...data,
         imageUrl: {
@@ -227,19 +230,18 @@ const RegistrationScreen = ({navigation}) => {
   };
 
   const registrationHandler = () => {
-    const imageUrl = data.imageUrl.value;
-    const name = data.name.value;
-    const email = data.email.value;
-    const password = data.password.value;
+    const imageUri = data.imageUrl.value;
+    const names = data.name.value;
+    const emails = data.email.value;
+    const passwords = data.password.value;
 
-    if (imageUrl && name && email && password) {
+    if (imageUri && names && emails && passwords) {
       setVisible(true);
-      authRegisterUser(email, password);
-      registrationUser(imageUrl, name, email);
+      authAndRegisterUser(imageUri, names, emails, passwords);
       setTimeout(() => {
-        navigation.navigate('LoginScreen');
         setVisible(false);
-      }, 2000);
+        navigation.navigate('LoginScreen');
+      }, 3000);
     }
   };
 
