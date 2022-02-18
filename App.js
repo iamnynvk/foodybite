@@ -1,6 +1,7 @@
 import React from 'react';
-import {LogBox} from 'react-native';
+import {LogBox, View} from 'react-native';
 import Providers from './src/navigation/';
+import FlashMessage from 'react-native-flash-message';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -8,7 +9,12 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
-  return <Providers />;
+  return (
+    <View style={{flex: 1}}>
+      <Providers />
+      <FlashMessage position="top" />
+    </View>
+  );
 };
 
 export default App;

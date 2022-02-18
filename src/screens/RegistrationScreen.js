@@ -339,7 +339,7 @@ const RegistrationScreen = ({navigation}) => {
                 onBlur={passwordValidation}
                 placeholderText="Password"
                 iconType={password}
-                iconStyle={{height: SIZES.width * 0.065}}
+                iconStyle={{height: SIZES.width * 0.07}}
                 keyboardType="default"
                 autoCapitalize="none"
                 secureTextEntry={true}
@@ -361,7 +361,7 @@ const RegistrationScreen = ({navigation}) => {
                 onBlur={rePasswordValidation}
                 placeholderText="Confirm Password"
                 iconType={password}
-                iconStyle={{height: SIZES.width * 0.065}}
+                iconStyle={{height: SIZES.width * 0.07}}
                 keyboardType="default"
                 autoCapitalize="none"
                 secureTextEntry={true}

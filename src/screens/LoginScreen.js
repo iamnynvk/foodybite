@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
+import {AuthContext} from '../navigation/AuthProvider';
 import {BlurView} from '@react-native-community/blur';
 import ProgressDialog from 'react-native-progress-dialog';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 // Constants
 import {backgroundOne} from '../constants/images';
@@ -18,6 +20,8 @@ import InputFields from '../components/InputFields';
 import Error from '../components/Error';
 
 const LoginScreen = ({navigation}) => {
+  const {loginUser} = useContext(AuthContext);
+
   const [data, setData] = useState({
     email: {value: '', error: '', isValid: false},
     password: {value: '', error: '', isValid: false},
@@ -102,11 +106,23 @@ const LoginScreen = ({navigation}) => {
     const emailValue = data.email.value;
     const passwordValue = data.password.value;
 
-    setVisible(true);
-    setTimeout(() => {
-      setVisible(false);
-      navigation.replace('HomeScreen');
-    }, 1000);
+    if (emailValue && passwordValue) {
+      setVisible(true);
+      loginUser(emailValue, passwordValue);
+      showMessage({
+        message: 'Login Successfully',
+        type: 'success',
+      });
+      setTimeout(() => {
+        setVisible(false);
+        navigation.replace('HomeScreen');
+      }, 1000);
+    } else {
+      showMessage({
+        message: 'Please! Enter Email and Password',
+        type: 'danger',
+      });
+    }
   };
 
   return (
@@ -160,7 +176,7 @@ const LoginScreen = ({navigation}) => {
             onBlur={passwordValidation}
             placeholderText="Password"
             iconType={password}
-            iconStyle={{height: SIZES.width * 0.075}}
+            iconStyle={{height: SIZES.width * 0.07}}
             keyboardType="default"
             autoCapitalize="none"
             secureTextEntry={true}

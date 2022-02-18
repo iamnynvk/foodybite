@@ -5,7 +5,6 @@ import {ToastAndroid} from 'react-native';
 import {
   getAuthUserId,
   authRegisterHandler,
-  registrationHandler,
   loginHandler,
 } from '../utils/firebase';
 

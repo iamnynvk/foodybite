@@ -5,6 +5,7 @@ import storage from '@react-native-firebase/storage';
 
 const firebaseAuth = auth();
 const db = firestore();
+const store = storage();
 
 /**
  * get current user id - you can use auth().currentUser;
@@ -25,43 +26,33 @@ export const authRegisterHandler = async (imageUrl, name, email, password) => {
     firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then(confirmResult => {
+        resolve(confirmResult);
         confirmResult.user.sendEmailVerification();
         console.log('Auth User Detail From  Firebase File : ', confirmResult);
 
-        // get Authenticate User Id
+        // get Authenticate User Id - [this is not current user id]
         const uid = confirmResult.user.uid;
 
         // Upload Image to Firebase Storage
-        let imageName = 'profile/' + uid;
+        let imageName = 'profile_photo/' + uid;
 
-        firebase
-          .storage()
-          .ref(imageName)
-          .putFile(imageUrl)
-          .then(snapshot => {
-            console.log(
-              `${snapshot.bytesTransferred} transferred out of ${snapshot.totalBytes}`,
-            );
-            console.log('Image has been uploaded.');
+        // Upload Image to Firebase Storage
+        let task = store.ref(imageName).putFile(imageUrl);
+
+        // Get Image Url
+        task.on('state_changed', snapshot => {
+          snapshot.ref.getDownloadURL().then(downloadURL => {
+            console.log('Image URL : ', downloadURL);
+
+            // Store user Data in cloud firestore
+            db.collection('Users').doc(uid).set({
+              username: name,
+              useremail: email,
+              userimage: downloadURL,
+              userid: uid,
+            });
           });
-
-        // Retrieve Image From Firebase Cloud Storage
-        let imageRef = firebase.storage().ref(imageName);
-
-        const url = imageRef.getDownloadURL.toString();
-
-        // db.collection('Users').doc(uid).update({
-        //   userimage: url,
-        // });
-
-        // Simple User Registration Detail
-        db.collection('Users').doc(uid).set({
-          username: name,
-          useremail: email,
-          userimage: imageUrl,
-          userid: uid,
         });
-        resolve(confirmResult);
       })
       .catch(error => {
         console.log('Firebase Auth User Error from Firebase File : ', error);
