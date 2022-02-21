@@ -27,20 +27,21 @@ const Tabs = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <Tabs.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeScreen"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarActiveTintColor: '#5663FF',
         tabBarStyle: {
           backgroundColor: 'white',
           position: 'absolute',
-          bottom: 20,
-          left: 10,
-          right: 10,
-          borderRadius: 15,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
           backgroundColor: 'white',
           elevation: 0,
-          height: 90,
+          height: 60,
           ...styles.shadow,
         },
       }}>
@@ -140,14 +141,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   imageStyle: {
-    height: 25,
-    width: 25,
+    height: 23,
+    width: 23,
     alignSelf: 'center',
   },
   addImageStyle: {
-    height: 70,
-    width: 70,
-    top: -30,
+    height: 60,
+    width: 60,
+    top: -20,
   },
 });
 

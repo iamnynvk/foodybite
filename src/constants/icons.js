@@ -15,6 +15,7 @@ const profilefill = require('../../assets/icons/ProfileFill.png');
 const profileunfill = require('../../assets/icons/ProfileUnFill.png');
 const search = require('../../assets/icons/search.png');
 const setting = require('../../assets/icons/setting.png');
+const star = require('../../assets/icons/star.png');
 
 export {
   mail,
@@ -34,4 +35,5 @@ export {
   profileunfill,
   search,
   setting,
+  star,
 };

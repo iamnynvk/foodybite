@@ -1,8 +1,11 @@
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {AuthContext} from '../navigation/AuthProvider';
+
+// Cmponents
+import Resturents from '../components/Resturents';
 import SearchBar from '../components/SearchBar';
 import TitleText from '../components/TitleText';
-import {AuthContext} from '../navigation/AuthProvider';
 
 const Homescreen = () => {
   const {authUser} = useContext(AuthContext);
@@ -13,8 +16,13 @@ const Homescreen = () => {
       {/* search bar set here */}
       <SearchBar />
 
-      {/* Trending Resturents*/}
-      <TitleText title="Trending Restaurants" seeall="See all(45)" />
+      <ScrollView>
+        {/* Trending Resturents*/}
+        <TitleText title="Trending Restaurants" seeall="See all(45)" />
+
+        {/* Trending Resturents List */}
+        <Resturents />
+      </ScrollView>
     </View>
   );
 };
@@ -22,7 +30,7 @@ const Homescreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F6F6F6',
   },
 });
 
