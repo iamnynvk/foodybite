@@ -84,3 +84,47 @@ export const loginHandler = async (email, password) => {
       });
   });
 };
+
+/**
+ *
+ * @param {*} uid pass user id throw check user is exist or not
+ * @returns
+ */
+
+export const getAuthUserData = uid => {
+  return new Promise((resolve, reject) => {
+    console.log(uid);
+    db.collection('Users')
+      .doc(uid)
+      .get()
+      .then(snapshot => {
+        const user = snapshot.data();
+        if (user === undefined) {
+          console.log('User Data Not Found from Firebase file');
+        } else {
+          console.log('User is Available in Database firebase file');
+        }
+        resolve(snapshot);
+      })
+      .catch(error => {
+        console.log('Error : ', error);
+        reject(error);
+      });
+  });
+};
+
+/**
+ *
+ * @returns signOutUser logout user here...
+ */
+
+export const signOutUser = () => {
+  return new Promise((resolve, reject) => {
+    auth()
+      .signOut()
+      .then(data => {
+        console.log('User Signed Out');
+        resolve(data);
+      });
+  });
+};

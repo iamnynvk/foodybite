@@ -2,7 +2,6 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 // Screens
-import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegistrationScreen from '../screens/RegistrationScreen';
 import Homescreen from '../screens/Homescreen';
@@ -13,11 +12,6 @@ const Stack = createStackNavigator();
 const AuthStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="SplashScreen"
-        component={SplashScreen}
-        options={{headerShown: false}}
-      />
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}

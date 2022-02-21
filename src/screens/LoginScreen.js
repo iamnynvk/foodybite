@@ -10,7 +10,6 @@ import {
 import {AuthContext} from '../navigation/AuthProvider';
 import {BlurView} from '@react-native-community/blur';
 import ProgressDialog from 'react-native-progress-dialog';
-import {showMessage, hideMessage} from 'react-native-flash-message';
 
 // Constants
 import {backgroundOne} from '../constants/images';
@@ -106,23 +105,11 @@ const LoginScreen = ({navigation}) => {
     const emailValue = data.email.value;
     const passwordValue = data.password.value;
 
-    if (emailValue && passwordValue) {
-      setVisible(true);
+    setVisible(true);
+    setTimeout(() => {
       loginUser(emailValue, passwordValue);
-      showMessage({
-        message: 'Login Successfully',
-        type: 'success',
-      });
-      setTimeout(() => {
-        setVisible(false);
-        navigation.replace('HomeScreen');
-      }, 1000);
-    } else {
-      showMessage({
-        message: 'Please! Enter Email and Password',
-        type: 'danger',
-      });
-    }
+      setVisible(false);
+    }, 2000);
   };
 
   return (
