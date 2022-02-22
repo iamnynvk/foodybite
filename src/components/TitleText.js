@@ -2,9 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {SIZES} from '../constants/theme';
 
-const TitleText = ({title, seeall}) => {
+const TitleText = ({title, seeall, style}) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.textHead}>{title}</Text>
       <TouchableOpacity>
         <Text style={styles.textSide}>{seeall}</Text>
@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: SIZES.base * 2.2,
-    marginTop: SIZES.base * 2,
     alignContent: 'center',
     alignItems: 'center',
   },

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import Homescreen from '../screens/Homescreen';
+import AppStack from './AppStack';
 import FavouriteScreen from '../screens/FavouriteScreen';
 import AddPostScreen from '../screens/AddPostScreen';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -47,7 +47,7 @@ const TabNavigator = () => {
       }}>
       <Tabs.Screen
         name="HomeScreen"
-        component={Homescreen}
+        component={AppStack}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
