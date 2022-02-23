@@ -15,90 +15,70 @@ import LinearGradient from 'react-native-linear-gradient';
 import {star} from '../constants/icons';
 import {SIZES} from '../constants/theme';
 
-// Data
-import {RECIPIES} from '../../assets/Data/Recipies';
-const Resturents = () => {
-  const recipiesRender = recipiesData => {
-    return (
-      <View>
-        <TouchableNativeFeedback>
-          <View style={styles.container} key={recipiesData.index}>
-            <ImageBackground
-              source={{uri: recipiesData.item.recipiesimage}}
-              resizeMode="cover"
-              style={styles.image}>
-              <View style={styles.innerImageView}>
-                <TouchableOpacity>
-                  <View style={styles.innerButtonView}>
-                    <Text style={styles.innerText}>Open</Text>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                  <View
-                    style={[
-                      styles.innerButtonView,
-                      {
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <Image
-                      source={star}
-                      resizeMode="contain"
-                      style={styles.star}
-                    />
-                    <Text>4.5</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
-            <View style={styles.HeadingTextView}>
-              <Text style={styles.recipiesName}>
-                {recipiesData.item.recipiesname}
-              </Text>
-
-              {/* Side Button set  */}
-              <TouchableOpacity
-                onPress={() => console.log('Italiyan categories')}>
-                <LinearGradient
-                  colors={['#FF705E', '#FF705E', '#F58447']}
-                  style={styles.sideBarButton}>
-                  <Text style={styles.buttonText}>
-                    {recipiesData.item.categories}
-                  </Text>
-                </LinearGradient>
+const Resturents = ({data, onPress}) => {
+  return (
+    <View>
+      <TouchableNativeFeedback onPress={onPress}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={{
+              uri: data.item.recipiesimage,
+            }}
+            resizeMode="cover"
+            style={styles.image}>
+            <View style={styles.innerImageView}>
+              <TouchableOpacity>
+                <View style={styles.innerButtonView}>
+                  <Text style={styles.innerText}>Open</Text>
+                </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => console.log('Kilometer click')}>
+
+              <TouchableOpacity>
                 <View
-                  style={[styles.sideBarButton, {backgroundColor: '#848DFF'}]}>
-                  <Text style={styles.buttonText}>
-                    {recipiesData.item.distance}
-                  </Text>
+                  style={[
+                    styles.innerButtonView,
+                    {
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}>
+                  <Image
+                    source={star}
+                    resizeMode="contain"
+                    style={styles.star}
+                  />
+                  <Text style={{fontFamily: 'JosefinSans-Regular'}}>4.5</Text>
                 </View>
               </TouchableOpacity>
             </View>
+          </ImageBackground>
+          <View style={styles.HeadingTextView}>
+            <Text style={styles.recipiesName}>{data.item.recipiesname}</Text>
 
-            <View style={styles.addressView}>
-              <Text style={styles.addressText}>
-                {recipiesData.item.address}
-              </Text>
-            </View>
+            {/* Side Button set  */}
+            <TouchableOpacity
+              onPress={() => console.log('Italiyan categories')}>
+              <LinearGradient
+                colors={['#FF705E', '#FF705E', '#F58447']}
+                style={styles.sideBarButton}>
+                <Text style={styles.buttonText}>{data.item.categories}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log('Kilometer click')}>
+              <View
+                style={[styles.sideBarButton, {backgroundColor: '#848DFF'}]}>
+                <Text style={styles.buttonText}>{data.item.distance}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableNativeFeedback>
-      </View>
-    );
-  };
 
-  return (
-    <FlatList
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      data={RECIPIES}
-      renderItem={recipiesRender}
-      keyExtractor={(item, index) => index}
-    />
+          <View style={styles.addressView}>
+            <Text style={styles.addressText}>{data.item.address}</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
   );
 };
 

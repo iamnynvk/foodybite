@@ -2,11 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {SIZES} from '../constants/theme';
 
-const TitleText = ({title, seeall, style}) => {
+const TitleText = ({title, seeall, style, onPress}) => {
   return (
     <View style={[styles.container, style]}>
       <Text style={styles.textHead}>{title}</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <Text style={styles.textSide}>{seeall}</Text>
       </TouchableOpacity>
     </View>

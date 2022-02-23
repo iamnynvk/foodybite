@@ -3,7 +3,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 // Screens
 import Homescreen from '../screens/Homescreen';
-import TrendingResturentScreen from '../screens/TrendingResturentScreen';
+import TrendingResturentListScreen from '../screens/TrendingResturentListScreen';
+import ResturentScreen from '../screens/ResturentScreen';
+import CategoriesItemScreen from '../screens/CategoriesItemScreen';
+import CategoriesItemListScreen from '../screens/CategoriesItemListScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,8 +19,23 @@ const AppStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="TrendingResturent"
-        component={TrendingResturentScreen}
+        name="TrendingResturentListScreen"
+        component={TrendingResturentListScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ResturentScreen"
+        component={ResturentScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CategoriesItemListScreen"
+        component={CategoriesItemListScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CategoriesItemScreen"
+        component={CategoriesItemScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

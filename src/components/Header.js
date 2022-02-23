@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {SIZES} from '../constants/theme';
 
 const Header = ({title, iconType, back}) => {
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 20,
     height: 20,
-    marginLeft: 10,
+    marginLeft: 20,
   },
   titleView: {
     flex: 1,

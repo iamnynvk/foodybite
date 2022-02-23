@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, FlatList} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 
 // Cmponents
@@ -12,12 +12,10 @@ import {CATEGORIES, FRIENDS, RECIPIES} from '../../assets/Data/Recipies';
 import Categories from '../components/Categories';
 import Friends from '../components/Friends';
 import {SIZES} from '../constants/theme';
+import NavigationService from './NavigationService';
 
 const Homescreen = () => {
   const {authUser} = useContext(AuthContext);
-
-  console.log('WIndoewd Height :', SIZES.height);
-  console.log('this is homescreen data get : ', authUser);
 
   let lengthOfRecipies = RECIPIES.length;
   let lengthOfCategories = CATEGORIES.length;
@@ -37,32 +35,54 @@ const Homescreen = () => {
             title="Trending Restaurants"
             seeall={`See all(${lengthOfRecipies})`}
             style={{marginTop: SIZES.base * 2}}
+            onPress={() => {
+              NavigationService.navigate('TrendingResturentListScreen');
+            }}
           />
 
-          {/* Trending Resturents List */}
-          {/* {RECIPIES.map((item, index) => {
-            return (
+          {/* Render Resturents Data using components */}
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={RECIPIES}
+            renderItem={item => (
               <Resturents
-                key={index}
-                itemName={item.recipiesname}
-                itemImage={item.recipiesimage}
-                itemCategories={item.categories}
-                itemDistance={item.distance}
-                itemAddress={item.address}
+                data={item}
+                onPress={() => {
+                  NavigationService.navigate('ResturentScreen', {
+                    item,
+                  });
+                }}
               />
-            );
-          })} */}
-          <Resturents />
+            )}
+            keyExtractor={(item, index) => index}
+          />
 
           {/* Categories Resturents*/}
           <TitleText
             title="Category"
             seeall={`See all(${lengthOfCategories})`}
             style={{marginTop: SIZES.base * 2}}
+            onPress={() => {
+              NavigationService.navigate('CategoriesItemListScreen');
+            }}
           />
 
           {/* Categories Resturents List */}
-          <Categories />
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={CATEGORIES}
+            renderItem={item => (
+              <Categories
+                data={item}
+                onPress={() => {
+                  NavigationService.navigate('CategoriesItemScreen');
+                }}
+              />
+            )}
+            keyExtractor={(item, index) => index}
+          />
 
           {/* Friend Request */}
           <TitleText title="Friends" seeall={`See all(${lengthOfFrineds})`} />

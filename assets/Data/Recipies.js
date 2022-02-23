@@ -102,3 +102,26 @@ export const FRIENDS = [
       'https://secure.gravatar.com/avatar/ea4a232b2a8c2b116ef27574d8c0abb7?s=400&d=mm&r=g',
   },
 ];
+
+export const MENU_PHOTO = [
+  {
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/foodybite-7.appspot.com/o/Recipes%2FMask%20Group%202.jpg?alt=media&token=1677abff-574a-4d24-bf6a-748429a077d9',
+  },
+  {
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/foodybite-7.appspot.com/o/Recipes%2Feiliv-sonas-aceron-3.png?alt=media&token=b6dee187-a2fa-44c4-9602-41afefedf4ff',
+  },
+  {
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/foodybite-7.appspot.com/o/Recipes%2Feiliv-sonas-aceron-5.png?alt=media&token=13e875a4-5398-4711-be38-cff37520efbd',
+  },
+  {
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/foodybite-7.appspot.com/o/Recipes%2Feiliv-sonas-aceron-3.png?alt=media&token=b6dee187-a2fa-44c4-9602-41afefedf4ff',
+  },
+  {
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/foodybite-7.appspot.com/o/Recipes%2Fbrooke-lark-296282-unsplash.jpg?alt=media&token=5a389000-225f-4943-9842-5d258af756bf',
+  },
+];

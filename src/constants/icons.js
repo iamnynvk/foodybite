@@ -1,6 +1,7 @@
 const mail = require('../../assets/icons/mail.png');
 const password = require('../../assets/icons/password.png');
 const back = require('../../assets/icons/back.png');
+const backColor = require('../../assets/icons/backColor.png');
 const upload = require('../../assets/icons/upload.png');
 const profile = require('../../assets/icons/profile.png');
 const homefill = require('../../assets/icons/HomeFill.png');
@@ -16,11 +17,16 @@ const profileunfill = require('../../assets/icons/ProfileUnFill.png');
 const search = require('../../assets/icons/search.png');
 const setting = require('../../assets/icons/setting.png');
 const star = require('../../assets/icons/star.png');
+const favwhite = require('../../assets/icons/FavWhite.png');
+const sharewhite = require('../../assets/icons/ShareWhite.png');
+const direction = require('../../assets/icons/Direction.png');
+const call = require('../../assets/icons/Call.png');
 
 export {
   mail,
   password,
   back,
+  backColor,
   upload,
   profile,
   homefill,
@@ -36,4 +42,8 @@ export {
   search,
   setting,
   star,
+  favwhite,
+  sharewhite,
+  direction,
+  call,
 };

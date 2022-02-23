@@ -2,52 +2,37 @@ import React from 'react';
 import {
   View,
   Text,
-  FlatList,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {CATEGORIES} from '../../assets/Data/Recipies';
 import {SIZES} from '../constants/theme';
 
-const Categories = () => {
-  const rennderCategories = CategoriesItem => {
-    return (
-      <View style={styles.mainContainer}>
-        <TouchableOpacity>
-          <View style={styles.container}>
-            <ImageBackground
-              resizeMode="cover"
-              style={styles.image}
-              source={{
-                uri: CategoriesItem.item.image,
-              }}>
-              <LinearGradient
-                colors={[
-                  `${CategoriesItem.item.color.colorOne}`,
-                  `${CategoriesItem.item.color.colorTwo}`,
-                  `${CategoriesItem.item.color.colorThree}`,
-                ]}
-                style={styles.gradient}>
-                <Text style={styles.categoriesText}>
-                  {CategoriesItem.item.categories}
-                </Text>
-              </LinearGradient>
-            </ImageBackground>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+const Categories = ({data, onPress}) => {
   return (
-    <FlatList
-      data={CATEGORIES}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-      renderItem={rennderCategories}
-      keyExtractor={(item, index) => index}
-    />
+    <View style={styles.mainContainer}>
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.container}>
+          <ImageBackground
+            resizeMode="cover"
+            style={styles.image}
+            source={{
+              uri: data.item.image,
+            }}>
+            <LinearGradient
+              colors={[
+                `${data.item.color.colorOne}`,
+                `${data.item.color.colorTwo}`,
+                `${data.item.color.colorThree}`,
+              ]}
+              style={styles.gradient}>
+              <Text style={styles.categoriesText}>{data.item.categories}</Text>
+            </LinearGradient>
+          </ImageBackground>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
