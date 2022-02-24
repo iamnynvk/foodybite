@@ -21,6 +21,7 @@ const favwhite = require('../../assets/icons/FavWhite.png');
 const sharewhite = require('../../assets/icons/ShareWhite.png');
 const direction = require('../../assets/icons/Direction.png');
 const call = require('../../assets/icons/Call.png');
+const close = require('../../assets/icons/close.png');
 
 export {
   mail,
@@ -46,4 +47,5 @@ export {
   sharewhite,
   direction,
   call,
+  close,
 };

@@ -3,15 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
 import {SIZES} from '../constants/theme';
 
-const HeaderWithFunction = ({
-  title,
-  backIconType,
-  back,
-  shareIconType,
-  share,
-  favIconType,
-  fav,
-}) => {
+const HeaderWithClose = ({title, backIconType, back, closeIconType, close}) => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
@@ -31,17 +23,10 @@ const HeaderWithFunction = ({
           <Text style={[styles.textStyle, {color: '#222455'}]}>{title}</Text>
         </View>
 
-        {/* Share button */}
-        <TouchableOpacity onPress={share}>
+        {/* close button */}
+        <TouchableOpacity onPress={close}>
           <View style={styles.imageViews}>
-            <Image source={shareIconType} style={styles.imageStyles} />
-          </View>
-        </TouchableOpacity>
-
-        {/* Fav button */}
-        <TouchableOpacity onPress={fav}>
-          <View style={styles.imageViews}>
-            <Image source={favIconType} style={styles.imageStyles} />
+            <Image source={closeIconType} style={styles.imageStyles} />
           </View>
         </TouchableOpacity>
       </View>
@@ -90,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeaderWithFunction;
+export default HeaderWithClose;

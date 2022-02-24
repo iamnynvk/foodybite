@@ -1,143 +1,132 @@
 import {
   View,
   Text,
-  Button,
   StyleSheet,
-  ImageBackground,
   ScrollView,
   TouchableOpacity,
   Image,
+  FlatList,
 } from 'react-native';
 import React from 'react';
 import NavigationService from './NavigationService';
-import {BlurView} from '@react-native-community/blur';
-import LinearGradient from 'react-native-linear-gradient';
 
 // Components
-import {
-  sharewhite,
-  favwhite,
-  back,
-  direction,
-  call,
-  star,
-} from '../constants/icons';
-import HeaderWithFunction from '../components/HeaderWithFunction';
+
 import {SIZES} from '../constants/theme';
 import ResturentDetailImage from '../components/ResturentDetailImage';
+import ResturentDetail from '../components/ResturentDetail';
 import TitleText from '../components/TitleText';
-import {MENU_PHOTO} from '../../assets/Data/Recipies';
+import {MENU_PHOTO, RETTING} from '../../assets/Data/Recipies';
+import RateButton from '../components/RateButton';
+import ReviewPannel from '../components/ReviewPannel';
+import {back} from '../constants/icons';
 
 const ResturentScreen = props => {
-  const {recipiesname, recipiesimage, distance, categories, address} = {
+  const {
+    recipiesname,
+    recipiesimage,
+    distance,
+    categories,
+    address,
+    allOverRatting,
+  } = {
     ...props.route.params.item.item,
   };
 
-  const ShopOpenClose = () => {
-    const currentTime = new Date().getHours();
-    console.log(currentTime);
-
-    if (currentTime >= 10 && currentTime <= 22) {
-      return (
-        <View style={styles.descriptionView}>
-          <Text style={styles.descriptionText}>Open Now </Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.descriptionView}>
-          <Text style={styles.descriptionText}>Closed Now </Text>
-        </View>
-      );
-    }
-  };
-
   const lengthOfMenuItem = MENU_PHOTO.length;
+  const lengthOfReview = RETTING.length;
+
+  const renderMenus = item => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity>
+          <View style={styles.menuContainerView}>
+            <Image
+              source={{
+                uri: item.item.image,
+              }}
+              style={{
+                height: SIZES.base * 15,
+                width: SIZES.base * 15,
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true}>
         <View>
-          {/* Resturent Image set using Components */}
+          {/* Resturent Image set using Components [back-share-fav]*/}
           <ResturentDetailImage
             image={recipiesimage}
             name={recipiesname}
             onBack={() => {
-              NavigationService.goBack();
+              NavigationService.replace('TrendingResturentListScreen');
+            }}
+            onShare={() => {}}
+            onFav={() => {
+              console.log('fav Button');
             }}
           />
 
           {/* Restaurants Data set using Components */}
+          <ResturentDetail
+            name={recipiesname}
+            categories={categories}
+            distance={distance}
+            address={address}
+            ratting={allOverRatting}
+          />
 
-          <View style={styles.HeadingTextView}>
-            <Text style={styles.recipiesName}>Pau-Bhaji</Text>
-
-            {/* Side Button set  */}
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={() => console.log('Italiyan categories')}>
-                <LinearGradient
-                  colors={['#FF705E', '#FF705E', '#F58447']}
-                  style={styles.sideBarButton}>
-                  <Text style={styles.buttonText}>Italian</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => console.log('Kilometer click')}>
-                <View
-                  style={[styles.sideBarButton, {backgroundColor: '#848DFF'}]}>
-                  <Text style={styles.buttonText}>1.2 km</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View>
-              <TouchableOpacity>
-                <View
-                  style={[
-                    styles.innerButtonView,
-                    {
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    },
-                  ]}>
-                  <Image
-                    source={star}
-                    resizeMode="contain"
-                    style={styles.star}
-                  />
-                  <Text style={styles.rettingText}>4.5</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.addressView}>
-            <Text style={styles.addressText}>
-              394 Broome St, New York, NY 10013, USA
-            </Text>
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            {ShopOpenClose()}
-
-            <View>
-              <Text style={styles.descriptionTexts}>Daily Time </Text>
-            </View>
-
-            <View>
-              <Text style={styles.descriptionText}>9:30 Am to 11:30 Am</Text>
-            </View>
-          </View>
-
+          {/* Menu & Photo section */}
           <View style={{marginTop: SIZES.base * 2}}>
             <TitleText
-              title="Menu - Photos"
+              title={`Menu & Photos`}
               seeall={`See all (${lengthOfMenuItem})`}
             />
+
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={MENU_PHOTO}
+              keyExtractor={(item, index) => index}
+              renderItem={renderMenus}
+            />
           </View>
+
+          {/* Review & Retting Pannel */}
+          <View style={{}}>
+            <TitleText
+              title={`Reviews & Rattings`}
+              seeall={`See all (${lengthOfReview})`}
+            />
+          </View>
+
+          {/* user Review set here  */}
+          <ScrollView>
+            {RETTING.map((item, index) => {
+              return <ReviewPannel data={item} key={index} />;
+            })}
+          </ScrollView>
         </View>
       </ScrollView>
+      <RateButton
+        title={`Rate this restaurant`}
+        onPress={() => {
+          props.navigation.navigate('ReviewWriteScreens', {
+            recipiesname,
+            recipiesimage,
+            distance,
+            categories,
+            address,
+            allOverRatting,
+          });
+        }}
+      />
     </View>
   );
 };
@@ -146,62 +135,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
-  HeadingTextView: {
-    flexDirection: 'row',
-    marginHorizontal: SIZES.base * 2,
-    marginTop: SIZES.base * 2,
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  recipiesName: {
-    fontFamily: 'JosefinSans-Bold',
-    fontSize: SIZES.font * 1.5,
-    color: '#3E3F68',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '600',
-    padding: SIZES.base * 0.8,
-    fontFamily: 'JosefinSans-Regular',
-  },
-  sideBarButton: {
-    borderRadius: 25,
-    marginLeft: SIZES.base * 1,
-  },
-  innerButtonView: {
-    backgroundColor: '#FFFFFF',
-    padding: SIZES.base * 0.8,
+  menuContainerView: {
+    height: SIZES.base * 15,
+    width: SIZES.base * 15,
+    margin: SIZES.base * 2,
     borderRadius: 10,
+    overflow: 'hidden',
   },
-  star: {
-    height: SIZES.base * 2.2,
-    width: SIZES.base * 2.2,
-  },
-  rettingText: {
-    fontFamily: 'JosefinSans-Regular',
-  },
-  addressView: {
-    marginHorizontal: SIZES.base * 2,
-    marginVertical: SIZES.base * 1,
-  },
-  addressText: {
-    fontFamily: 'JosefinSans-Regular',
-  },
-  descriptionView: {
-    marginStart: SIZES.base * 2,
-  },
-  descriptionText: {
-    color: 'red',
-    fontFamily: 'JosefinSans-Regular',
-  },
-  descriptionTexts: {
-    fontFamily: 'JosefinSans-Regular',
-  },
-  imageStyles: {
-    height: SIZES.base * 10,
-    width: SIZES.base * 10,
+
+  rettingNameStyles: {
+    flexDirection: 'row',
   },
 });
 

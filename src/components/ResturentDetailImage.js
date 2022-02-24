@@ -21,7 +21,7 @@ import {
   star,
 } from '../constants/icons';
 
-const ResturentDetailImage = ({image, name, onBack}) => {
+const ResturentDetailImage = ({image, name, onBack, onShare, onFav}) => {
   return (
     <View>
       <ImageBackground
@@ -34,23 +34,19 @@ const ResturentDetailImage = ({image, name, onBack}) => {
           backIconType={backColor}
           back={onBack}
           shareIconType={sharewhite}
-          share={() => {
-            console.log('Open Share screen');
-          }}
+          share={onShare}
           favIconType={favwhite}
-          fav={() => {
-            console.log('This is Fav screen');
-          }}
+          fav={onFav}
         />
 
         {/* ImageBackground on Write data */}
         <View style={styles.contactView}>
-          <BlurView
+          {/* <BlurView
             blurAmount={10}
             blurType="light"
             style={styles.blurView}
             reducedTransparencyFallbackColor="light"
-          />
+          /> */}
 
           <View style={styles.blurViewContainer}>
             <View
@@ -125,12 +121,13 @@ const styles = StyleSheet.create({
     right: 0,
   },
   contactView: {
-    marginTop: SIZES.height * 0.2,
+    marginTop: SIZES.height * 0.23,
     marginHorizontal: SIZES.width * 0.1,
     borderRadius: 25,
-    height: SIZES.height * 0.08,
+    height: SIZES.height * 0.06,
     overflow: 'hidden',
     justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   blurViewContainer: {
     flexDirection: 'row',

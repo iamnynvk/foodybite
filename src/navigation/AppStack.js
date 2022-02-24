@@ -7,6 +7,7 @@ import TrendingResturentListScreen from '../screens/TrendingResturentListScreen'
 import ResturentScreen from '../screens/ResturentScreen';
 import CategoriesItemScreen from '../screens/CategoriesItemScreen';
 import CategoriesItemListScreen from '../screens/CategoriesItemListScreen';
+import ReviewWriteScreens from '../screens/ReviewWriteScreens';
 
 const Stack = createStackNavigator();
 
@@ -19,13 +20,13 @@ const AppStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="TrendingResturentListScreen"
-        component={TrendingResturentListScreen}
+        name="ResturentScreen"
+        component={ResturentScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="ResturentScreen"
-        component={ResturentScreen}
+        name="TrendingResturentListScreen"
+        component={TrendingResturentListScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -36,6 +37,11 @@ const AppStack = () => {
       <Stack.Screen
         name="CategoriesItemScreen"
         component={CategoriesItemScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ReviewWriteScreens"
+        component={ReviewWriteScreens}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
