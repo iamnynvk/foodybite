@@ -35,6 +35,7 @@ export const AuthProvider = ({children}) => {
               `Verification Email Sent to ${emails}`,
               ToastAndroid.LONG,
             );
+            NavigationService.replace('Homescreen');
           } catch (error) {
             console.log('Authenticate Error from context : ', error);
           }

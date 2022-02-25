@@ -1,10 +1,10 @@
+import React, {useEffect, useRef} from 'react';
 import {View, Text} from 'react-native';
-import React from 'react';
 
 const NotificationScreen = () => {
   return (
-    <View>
-      <Text>NotificationScreen</Text>
+    <View style={{flex: 1}}>
+      <Text>notificationfill</Text>
     </View>
   );
 };

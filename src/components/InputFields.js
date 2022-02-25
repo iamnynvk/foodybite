@@ -10,6 +10,7 @@ const InputFields = ({
   iconType,
   style,
   iconStyle,
+  onPress,
   ...rest
 }) => {
   return (
@@ -24,6 +25,7 @@ const InputFields = ({
         placeholder={placeholderText}
         placeholderTextColor="white"
         style={styles.inputTextField}
+        onPress={onPress}
         {...rest}
       />
     </View>

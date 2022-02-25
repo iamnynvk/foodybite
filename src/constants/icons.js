@@ -22,6 +22,11 @@ const sharewhite = require('../../assets/icons/ShareWhite.png');
 const direction = require('../../assets/icons/Direction.png');
 const call = require('../../assets/icons/Call.png');
 const close = require('../../assets/icons/close.png');
+const resturents = require('../../assets/icons/Resturents.png');
+const mobile = require('../../assets/icons/mobile.png');
+const clock = require('../../assets/icons/clock.png');
+const categories = require('../../assets/icons/categories.png');
+const address = require('../../assets/icons/address.png');
 
 export {
   mail,
@@ -48,4 +53,9 @@ export {
   direction,
   call,
   close,
+  resturents,
+  mobile,
+  clock,
+  categories,
+  address,
 };

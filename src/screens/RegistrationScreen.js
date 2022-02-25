@@ -238,10 +238,6 @@ const RegistrationScreen = ({navigation}) => {
     if (imageUri && names && emails && passwords) {
       setVisible(true);
       authAndRegisterUser(imageUri, names, emails, passwords);
-      setTimeout(() => {
-        setVisible(false);
-        navigation.navigate('LoginScreen');
-      }, 3000);
     }
   };
 
@@ -426,7 +422,7 @@ const styles = StyleSheet.create({
     borderRadius: (SIZES.width * 0.3) / 2,
     alignSelf: 'center',
     marginTop: SIZES.width * 0.1,
-    overflow: 'visible',
+    overflow: 'hidden',
   },
   imageStyle: {
     position: 'absolute',
@@ -441,13 +437,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-  },
-  uploadView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderWidth: 1,
-    borderColor: 'red',
   },
   imageSet: {
     flex: 1,

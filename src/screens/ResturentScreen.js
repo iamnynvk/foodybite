@@ -19,7 +19,6 @@ import TitleText from '../components/TitleText';
 import {MENU_PHOTO, RETTING} from '../../assets/Data/Recipies';
 import RateButton from '../components/RateButton';
 import ReviewPannel from '../components/ReviewPannel';
-import {back} from '../constants/icons';
 
 const ResturentScreen = props => {
   const {
