@@ -1,7 +1,7 @@
 import React, {createContext, useState} from 'react';
 import NavigationService from '../screens/NavigationService';
 import {ToastAndroid} from 'react-native';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 
 // Import Methods from Firebase
 import {
@@ -9,6 +9,7 @@ import {
   authRegisterHandler,
   loginHandler,
   getAuthUserData,
+  uploadingPost,
   signOutUser,
 } from '../utils/firebase';
 
@@ -57,7 +58,6 @@ export const AuthProvider = ({children}) => {
               });
               NavigationService.replace('HomeScreen', {
                 user,
-                data: 'Name is nayan vekariya',
               });
             } else {
               showMessage({
@@ -67,6 +67,31 @@ export const AuthProvider = ({children}) => {
             }
           } catch (error) {
             console.log('Login Error from context : ', error);
+          }
+        },
+
+        // Resturent Posting Method
+
+        uploadPost: async (
+          resImage,
+          resName,
+          resMobile,
+          resCategorie,
+          resAddress,
+          resCloseTime,
+        ) => {
+          try {
+            await uploadingPost(
+              resImage,
+              resName,
+              resMobile,
+              resCategorie,
+              resAddress,
+              resCloseTime,
+              getAuthUserId(),
+            );
+          } catch (error) {
+            console.log('Post Uploading Error from context : ', error);
           }
         },
 

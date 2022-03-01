@@ -85,6 +85,68 @@ export const loginHandler = async (email, password) => {
   });
 };
 
+export const uploadingPost = async (
+  resImage,
+  resName,
+  resMobile,
+  resCategorie,
+  resAddress,
+  resCloseTime,
+  uid,
+) => {
+  return new Promise((resolve, reject) => {
+    // Upload Image to Firebase Storage
+    let imageName = 'Posts/' + Math.random().toString();
+
+    // Upload Image to Firebase Storage
+    let task = store.ref(imageName).putFile(resImage);
+
+    // Get Image Url
+    task.on('state_changed', snapshot => {
+      snapshot.ref
+        .getDownloadURL()
+        .then(downloadURL => {
+          console.log('Image URL : ', downloadURL);
+          let Dates = new Date();
+          let current_date =
+            Dates.getFullYear() +
+            '-' +
+            (Dates.getMonth() + 1) +
+            '-' +
+            Dates.getDate();
+
+          let current_time =
+            Dates.getHours() +
+            ':' +
+            Dates.getMinutes() +
+            ':' +
+            Dates.getSeconds();
+
+          // Store user Data in cloud firestore
+          const data = db
+            .collection('posts')
+            .doc()
+            .collection('restaurants')
+            .doc(resName)
+            .set({
+              resturent_image: downloadURL,
+              resturent_name: resName,
+              resturent_mobileno: resMobile,
+              resturent_category: resCategorie,
+              resturent_address: resAddress,
+              resturent_closeTime: resCloseTime,
+              userid: uid,
+            });
+          resolve(data);
+        })
+        .catch(error => {
+          console.log('Image Upload Error from Firebase File : ', error);
+          reject(error);
+        });
+    });
+  });
+};
+
 /**
  *
  * @param {*} uid pass user id throw check user is exist or not

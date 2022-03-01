@@ -1,6 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, FlatList} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
+import {firebase} from '@react-native-firebase/firestore';
 
 // Cmponents
 import Resturents from '../components/Resturents';
@@ -16,8 +17,37 @@ import NavigationService from './NavigationService';
 
 const Homescreen = () => {
   const {authUser} = useContext(AuthContext);
+  const userId = authUser?.uid;
+  const db = firebase.firestore();
+  const [resturent, setResturent] = useState([]);
 
-  let lengthOfRecipies = RECIPIES.length;
+  useEffect(() => {
+    // db.collection('posts').onSnapshot(querySnapshot => {
+    //   console.log('querySnapshot', querySnapshot);
+    //   querySnapshot.docs.forEach(doc => {
+    //     console.log('>>>>>>>>>>', doc);
+    //   });
+    // });
+    db.collection('posts')
+      .doc(userId)
+      .collection('restaurants')
+      .onSnapshot(doc => {
+        let resturentArray = [];
+        doc.docs.map(doc => {
+          resturentArray.push({
+            resturentName: doc.data().resturent_name,
+            resturentMobile: doc.data().resturent_mobileno,
+            resturentImage: doc.data().resturent_image,
+            resturentCloseTime: doc.data().resturent_closeTime,
+            resturentCategories: doc.data().resturent_category,
+            resturentAddress: doc.data().resturent_address,
+          });
+          setResturent(resturentArray);
+        });
+      });
+  }, []);
+
+  let lengthOfRecipies = resturent.length;
   let lengthOfCategories = CATEGORIES.length;
   let lengthOfFrineds = FRIENDS.length;
 
@@ -44,7 +74,7 @@ const Homescreen = () => {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={RECIPIES}
+            data={resturent}
             renderItem={item => (
               <Resturents
                 data={item}

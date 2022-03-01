@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 import {star} from '../constants/icons';
@@ -22,7 +23,7 @@ const Resturents = ({data, onPress}) => {
         <View style={styles.container}>
           <ImageBackground
             source={{
-              uri: data.item.recipiesimage,
+              uri: data.item.resturentImage,
             }}
             resizeMode="cover"
             style={styles.image}>
@@ -54,7 +55,7 @@ const Resturents = ({data, onPress}) => {
             </View>
           </ImageBackground>
           <View style={styles.HeadingTextView}>
-            <Text style={styles.recipiesName}>{data.item.recipiesname}</Text>
+            <Text style={styles.recipiesName}>{data.item.resturentName}</Text>
 
             {/* Side Button set  */}
             <TouchableOpacity
@@ -62,19 +63,21 @@ const Resturents = ({data, onPress}) => {
               <LinearGradient
                 colors={['#FF705E', '#FF705E', '#F58447']}
                 style={styles.sideBarButton}>
-                <Text style={styles.buttonText}>{data.item.categories}</Text>
+                <Text style={styles.buttonText}>
+                  {data.item.resturentCategories}
+                </Text>
               </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => console.log('Kilometer click')}>
               <View
                 style={[styles.sideBarButton, {backgroundColor: '#848DFF'}]}>
-                <Text style={styles.buttonText}>{data.item.distance}</Text>
+                <Text style={styles.buttonText}>1.2 Km</Text>
               </View>
             </TouchableOpacity>
           </View>
 
           <View style={styles.addressView}>
-            <Text style={styles.addressText}>{data.item.address}</Text>
+            <Text style={styles.addressText}>{data.item.resturentAddress}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>

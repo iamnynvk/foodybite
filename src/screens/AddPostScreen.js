@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,13 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
-  Button,
-  SafeAreaView,
 } from 'react-native';
 import NavigationService from './NavigationService';
 import ProgressDialog from 'react-native-progress-dialog';
 import ImagePicker from 'react-native-image-crop-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {AuthContext} from '../navigation/AuthProvider';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 // Components
 import HeaderWithClose from '../components/HeaderWithClose';
@@ -23,56 +23,61 @@ import {
   backColor,
   resturents,
   mobile,
-  clock,
   categories,
   address,
 } from '../constants/icons';
-import {backgroundOne, backgroundTwo} from '../constants/images';
+import {backgroundOne} from '../constants/images';
 import {SIZES} from '../constants/theme';
 import InputFields from '../components/InputFields';
 
 const AddPostScreen = () => {
+  const {uploadPost} = useContext(AuthContext);
+
   const defaultImage =
     'https://images.pexels.com/photos/6267/menu-restaurant-vintage-table.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+
   // State Here...
   const [data, setData] = useState({
     restImage: {value: defaultImage, error: '', isValid: false},
     restName: {value: '', error: '', isValid: false},
     restMobile: {value: '', error: '', isValid: false},
-    restOpen: {value: '', error: '', isValid: false},
-    restClose: {value: '', error: '', isValid: false},
+    restClose: {value: new Date(), error: '', isValid: false},
     restCategories: {value: '', error: '', isValid: false},
     restAddress: {value: '', error: '', isValid: false},
   });
 
   const [visible, setVisible] = useState(false);
-  // const [date, setDate] = useState(new Date(1598051730000));
-  // const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
 
-  // <Button
-  //   title="show time picker!"
-  //   onPress={() => {
-  //     setShow(true);
-  //   }}
-  // />;
-  // {
-  //   show && (
-  //     <DateTimePicker
-  //       testID="dateTimePicker"
-  //       value={date}
-  //       mode={'time'}
-  //       is24Hour={true}
-  //       display="default"
-  //       onChange={onChange}
-  //     />
-  //   );
-  // }
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setDate(currentDate);
-  // };
+  // All Action & Validation Here..
+  // SUbmit Handler
+  const submitPostHandler = () => {
+    const resImage = data.restImage.value;
+    const resName = data.restName.value;
+    const resMobile = data.restMobile.value;
+    const resCategorie = data.restCategories.value;
+    const resAddress = data.restAddress.value;
+    const resCloseTime = data.restClose.value;
 
-  // All Action & Validation Here...
+    setVisible(true);
+    setTimeout(() => {
+      uploadPost(
+        resImage,
+        resName,
+        resMobile,
+        resCategorie,
+        resAddress,
+        resCloseTime,
+      );
+      setVisible(false);
+      showMessage({
+        message: 'Successfully Data Uploaded',
+        type: 'success',
+      });
+      NavigationService.navigate('Homescreen');
+    }, 2000);
+  };
 
   // Image Picker - Open Gallery
 
@@ -101,7 +106,7 @@ const AddPostScreen = () => {
 
   const restNameValid = () => {
     const {value} = data.restName;
-    if (value == '') {
+    if (value == null || value == '') {
       setData({
         ...data,
         restName: {
@@ -122,7 +127,7 @@ const AddPostScreen = () => {
     } else {
       setData({
         ...data,
-        restName: {...data.restName, value: value, isValid: true},
+        restName: {...data.restName, isValid: true},
       });
     }
   };
@@ -146,7 +151,6 @@ const AddPostScreen = () => {
         ...data,
         restMobile: {
           ...data.restMobile,
-          value: value,
           isValid: true,
         },
       });
@@ -155,7 +159,7 @@ const AddPostScreen = () => {
 
   const restCategoriesValid = () => {
     const {value} = data.restCategories;
-    if (value == '') {
+    if (value == null || value == '') {
       setData({
         ...data,
         restCategories: {
@@ -164,7 +168,7 @@ const AddPostScreen = () => {
           isValid: false,
         },
       });
-    } else if (value.length <= 3) {
+    } else if (value.length <= 5) {
       setData({
         ...data,
         restCategories: {
@@ -176,7 +180,7 @@ const AddPostScreen = () => {
     } else {
       setData({
         ...data,
-        restCategories: {...data.restCategories, value: value, isValid: true},
+        restCategories: {...data.restCategories, isValid: true},
       });
     }
   };
@@ -184,7 +188,7 @@ const AddPostScreen = () => {
   const restAddressValid = () => {
     const {value} = data.restAddress;
 
-    if (value == '') {
+    if (value == '' || value == null) {
       setData({
         ...data,
         restAddress: {
@@ -205,8 +209,54 @@ const AddPostScreen = () => {
     } else {
       setData({
         ...data,
-        restAddress: {...data.restAddress, value: value, isValid: true},
+        restAddress: {...data.restAddress, isValid: true},
       });
+    }
+  };
+
+  // resturent close time
+  const onChangeClose = (event, selectDate) => {
+    console.log('close time :', selectDate);
+    setData({
+      ...data,
+      restClose: {
+        ...data.restClose,
+        value: new Date(selectDate),
+        isValid: true,
+      },
+    });
+    setShow(false);
+  };
+
+  const showMode = () => {
+    setShow(true);
+  };
+
+  // Set Login Button Visible or not
+  useEffect(() => {
+    VisibleButton();
+  }, [{...data}]);
+
+  const VisibleButton = () => {
+    let restImageErr = data.restImage.error;
+    let restNameErr = data.restName.error;
+    let restMobileErr = data.restMobile.error;
+    let restCloseErr = data.restClose.error;
+    let restCategoriesErr = data.restCategories.error;
+    let restAddressErr = data.restAddress.error;
+
+    if (
+      restImageErr === undefined ||
+      (restImageErr === null && restNameErr === undefined) ||
+      (restNameErr === null && restMobileErr === undefined) ||
+      (restMobileErr === null && restCloseErr === null) ||
+      (restCloseErr === null && restCategoriesErr === undefined) ||
+      (restCategoriesErr === null && restAddressErr === undefined) ||
+      restAddressErr === null
+    ) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
     }
   };
 
@@ -335,32 +385,48 @@ const AddPostScreen = () => {
               <Error error={data.restAddress.error} />
             </View>
 
-            {/* OpenTime & CloseTime */}
+            {/* CloseTime */}
             <View style={styles.mainContainer}>
-              <View style={styles.inputContainer}>
-                <View style={styles.imageView}>
-                  <Image source={clock} style={styles.inputImage} />
-                </View>
-                <View>
-                  <Text style={styles.inputTextField}>
-                    Resturent Open Close Time
-                  </Text>
-                </View>
+              <View>
+                <Text style={styles.inputTextField}>Resturent Close Time</Text>
               </View>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <View>
-                  <TouchableOpacity>
-                    <Text style={{color: 'white'}}>9:30 am</Text>
-                  </TouchableOpacity>
-                </View>
+                {show && (
+                  <DateTimePicker
+                    testID="time"
+                    value={data.restClose.value}
+                    mode={'time'}
+                    is24Hour={true}
+                    onChange={onChangeClose}
+                  />
+                )}
 
-                <View>
-                  <TouchableOpacity>
-                    <Text style={{color: 'white'}}>11:00 pm</Text>
+                <View style={styles.timing}>
+                  <TouchableOpacity onPress={showMode}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontFamily: 'JosefinSans-Medium',
+                      }}>
+                      {data?.restClose?.value?.getHours() +
+                        ':' +
+                        data?.restClose?.value?.getMinutes()}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
+            </View>
+
+            {/* Submit Button */}
+            <View style={styles.submitContainer}>
+              <TouchableOpacity
+                onPress={submitPostHandler}
+                disabled={isDisabled}>
+                <View style={[styles.submitView, isDisabled && {opacity: 0.5}]}>
+                  <Text style={styles.textStyles}>Submit Post</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -412,11 +478,22 @@ const styles = StyleSheet.create({
     marginEnd: SIZES.width * 0.05,
     marginVertical: SIZES.height * 0.05,
   },
-  inputContainer: {
+  inputImage: {
+    height: 50,
+    width: 23.7,
+    alignSelf: 'center',
+  },
+  inputTextField: {
+    borderColor: 'white',
+    color: 'white',
+    marginLeft: 7,
+    fontFamily: 'JosefinSans-Medium',
+    fontSize: 17,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 10,
   },
-  imageView: {
+  imagesView: {
     paddingRight: 10,
     borderRightWidth: 1,
     borderRightColor: 'white',
@@ -424,17 +501,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
-  inputImage: {
-    height: 50,
-    width: 23.7,
+  timing: {
+    marginVertical: 10,
   },
-  inputTextField: {
+  buttonContainer: {
+    alignItems: 'center',
+    margin: SIZES.height * 0.05,
     borderWidth: 1,
-    borderColor: 'white',
+    height: SIZES.width * 0.1,
+    backgroundColor: '#5663FF',
+    alignContent: 'center',
+  },
+  textContainer: {
     color: 'white',
-    marginLeft: 7,
+  },
+  submitContainer: {
+    backgroundColor: '#5663FF',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    overflow: 'hidden',
+  },
+  submitView: {
+    height: SIZES.height / 15,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    backgroundColor: '#5663FF',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  textStyles: {
+    color: 'white',
     fontFamily: 'JosefinSans-Medium',
-    fontSize: 17,
   },
 });
 export default AddPostScreen;

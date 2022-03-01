@@ -7,7 +7,6 @@ import {SIZES} from '../constants/theme';
 const ResturentDetail = ({name, categories, distance, address, ratting}) => {
   const ShopOpenClose = () => {
     const currentTime = new Date().getHours();
-    console.log(currentTime);
 
     if (currentTime >= 10 && currentTime <= 22) {
       return (

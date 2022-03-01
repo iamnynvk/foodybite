@@ -32,6 +32,8 @@ const ResturentScreen = props => {
     ...props.route.params.item.item,
   };
 
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>', props.route.params.item);
+
   const lengthOfMenuItem = MENU_PHOTO.length;
   const lengthOfReview = RETTING.length;
 
