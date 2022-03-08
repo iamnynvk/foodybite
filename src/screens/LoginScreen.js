@@ -124,7 +124,6 @@ const LoginScreen = ({navigation}) => {
         <BlurView
           blurType="dark"
           style={styles.blurStyle}
-          blurType="dark"
           blurAmount={1}
           reducedTransparencyFallbackColor="dark"
         />
